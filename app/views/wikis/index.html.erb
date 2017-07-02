@@ -1,0 +1,18 @@
+<div class="container">
+  <h1 class="text-center">All Wikis</h1>
+  <div class="col-md-12 text-center">
+    <%= link_to "Create A New Wiki", new_wiki_path, class: 'btn btn-lg btn-success center-block' %>
+  </div>
+</div>
+</br>
+<table class="table">
+  <% @wikis.each do |wiki| %>
+    <tbody>
+      <tr>
+        <td>
+          <%= link_to wiki.title, wiki %>
+        </td>
+      </tr>
+  <% end %>
+    </tbody>
+</table>
