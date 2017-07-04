@@ -1,4 +1,24 @@
-<div class="jumbotron">
-  <h1>Blocipedia</h1>
-    <p class="lead">Your wiki.</p>
-</div>
+<br>
+ <div class="jumbotron">
+   <h1>Blocipedia</h1>
+   <p>Blocipedia is a resource allos collaborative editing of its content and structure by its users!</p>
+   <p>
+     <%= link_to "Sign In", new_user_session_path %> or
+     <%= link_to "Sign Up", new_user_registration_path, class: 'btn btn-primary' %> today!
+   </p>
+ </div>
+
+ <div class="row">
+   <div class="col-md-4">
+     <h2>Compose wikis quickly</h2>
+     <p>Blocipedia will allow you to quickly share your ideas with others.</p>
+   </div>
+   <div class="col-md-4">
+     <h2>Great for collaborating</h2>
+     <p>Blocipedia will allow anyone who can read a wiki page to have the ability to edit it.</p>
+   </div>
+   <div class="col-md-4">
+     <h2>Create an awesome bio about yourself</h2>
+     <p>Blocipedia will allow you to create an awesome bio of yourself to share with anyone in the world. If it's on the internet, it must be true!</p>
+   </div>
+ </div>
