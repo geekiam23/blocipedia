@@ -23,6 +23,7 @@ gem 'figaro', '1.0'
 gem 'devise'
 gem 'pundit'
 gem 'bcrypt'
+gem 'stripe'
 
 group :development, :test do
   gem 'byebug'
