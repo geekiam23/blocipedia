@@ -15,7 +15,7 @@ class ChargesController < ApplicationController
       currency: 'usd'
     )
 
-    current_user.update_attribute(:role, 'premium')
+    current_user.premium!
 
     flash[:notice] = "Thanks for the payment, #{current_user.email}! You can now create and edit private wikis."
     redirect_to root_path
@@ -34,5 +34,16 @@ class ChargesController < ApplicationController
      description: "Premium Membership - #{current_user.name}",
      amount: 15_00
    }
- end
+  end
+
+  def cancel
+    current_user.standard!
+    current_user.wikis.each do |wik|
+      wik.private = false
+      wik.save
+    end
+
+    flash[:notice] = "Sorry to see you go! Your account has been downgraded."
+    redirect_to edit_user_registration_path(current_user)
+  end
 end

@@ -25,6 +25,7 @@ gem 'pundit'
 gem 'bcrypt'
 gem 'stripe'
 gem 'faker'
+gem 'clearance'
 
 group :development, :test do
   gem 'byebug'

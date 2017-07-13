@@ -1,19 +1,46 @@
 <div class="row">
   <div class="col-md-5">
-    <h2>Edit Account</h2>
-
-    <% if current_user.standard? %>
-      <%= button_to "Upgrade", charges_path, class: 'btn btn-success' %>
-    <% end %>
-
-    <% if current_user.premium? %>
-      <%= link_to "Downgrade", downgrade_user_path(current_user),data: { confirm: "Are you sure?" }, class: 'btn btn-warning' %>
-    <% end %>
+    <div class="">
+      <ul class="pager">
+        <li class="previous"><%= link_to "Back", :back %> </li>
+    </div>
+    <h3 class="text-center text-muted">Edit Account</h3>
+    <aside class="col-md-4">
+      <div class="media">
+        <div class="media-body">
+          <h3 class="user-role-type media-heading text-center text-muted"><%= current_user.role.capitalize %> User</h3>
+          <br />
+        </div>
+          <% if current_user.standard? %>
+            <p class="lead">You currenty have a <i><%= current_user.role.capitalize %></i> user profile. You can create public wikis and you can edit wikis that other users create. For more information about upgrading to <i><b>Premium</b></i> click the button below.</p>
+            <br/>
+            <div class="text-center"><%= button_to "Upgrade", new_charge_path(current_user), class: 'btn btn-success' %></div>
+          <% elsif current_user.premium? %>
+            <p class="lead">You currenty have a <i><%= current_user.role.capitalize %></i> user profile. You can create both public and private wikis and you can edit wikis that other users create. You can also make public wikis private.</p>
+            <br />
+            <div class="text-center"><%= link_to "Downgrade", downgrade_user_path(current_user),data: { confirm: "Are you sure?" }, class: 'btn btn-warning' %></div>
+          <% elsif current_user.admin? %>
+            <p class="lead">You're an <i>Admin</i> user. You can edit and delete any public or private wikis. You can even see private wikis created by other users.</p>
+            <p class="lead"><i>With great power comes great responsibility.</i></p>
+          <% end %>
+      </div>
+    </aside>
   </div>
 </div>
+<hr>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h3 class="text-center text-muted">Cancel My Account</h3>
+    <br />
+    <p class="lead">Unhappy? You can click the button below to permanently cancel and delete your account. <%= button_to "Delete My Account", registration_path(resource_name), class: "btn btn-danger", data: { confirm: "Are you sure you want to cancel and delete your account?" }, method: :delete %></p>
+  </div>
+</div>
+<hr>
 
 <div class="row">
   <div class="col-md-5">
+    <h3 class="text-center text-muted">Change My Password</h3>
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
       <%= devise_error_messages! %>
 
@@ -50,9 +77,8 @@
         <%= f.password_field :current_password, class: 'form-control', autocomplete: "off" %>
       </div>
 
-      <div class="actions">
-        <%= f.submit "Update", class: 'btn btn-primary' %>
+      <div class="actions" style="margin: 20px 0 60px 0">
+        <%= f.submit "Update", class: 'btn btn-primary center-block' %>
       </div>
     <% end %>
   </div>
-</div>
