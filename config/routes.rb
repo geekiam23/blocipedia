@@ -4,14 +4,11 @@ Rails.application.routes.draw do
 
   resources :wikis
 
+  # Custom Routes
+  get 'cancel_charge' => 'charges#cancel'
+  get 'cancelling_charge' => 'charges#cancelling'
+
   devise_for :users
-
-
-  resources :users, only: [] do
-    member do
-      get 'downgrade'
-    end
-  end
 
   root to: 'home#index'
 
