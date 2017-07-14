@@ -24,6 +24,7 @@ gem 'devise'
 gem 'pundit'
 gem 'bcrypt'
 gem 'stripe'
+gem 'faker'
 
 group :development, :test do
   gem 'byebug'

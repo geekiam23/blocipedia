@@ -1,7 +1,7 @@
 class WikisController < ApplicationController
 
   def index
-    @wikis = Wiki.all
+    @wikis = policy_scope(Wiki)
   end
 
   def show
@@ -13,18 +13,22 @@ class WikisController < ApplicationController
   end
 
   def create
-    @wiki = Wiki.new
-    @wiki.title = params[:wiki][:title]
-    @wiki.body = params[:wiki][:body]
+		@wiki = Wiki.new(wiki_params)
+		@wiki.user = current_user
 
-    if @wiki.save
-      flash[:notice] = "Wiki was saved."
-      redirect_to @wiki
-    else
-      flash.now[:alert] = "There was an error saving the wiki. Please try again."
-      render :new
-    end
-  end
+		if @wiki.private && @wiki.user.standard?
+			flash[:alert] = "You need a Premium account to make your Wiki private."
+			render :new
+		else
+			if @wiki.save
+				flash[:notice] = "Wiki was saved successfully."
+				redirect_to @wiki
+			else
+				flash[:alert] = "There was an error saving the wiki. Please try again."
+				render :new
+			end
+		end
+	end
 
   def edit
     @wiki = Wiki.find(params[:id])
@@ -34,9 +38,10 @@ class WikisController < ApplicationController
     @wiki = Wiki.find(params[:id])
     @wiki.title = params[:wiki][:title]
     @wiki.body = params[:wiki][:body]
+    authorize @wiki
 
-    if @wiki.save
-      flash[:notice] = "wiki was updated."
+    if @wiki.update(wiki_params)
+      flash[:notice] = "Wiki was updated."
       redirect_to @wiki
     else
       flash.now[:alert] = "There was an error saving the wiki. Please try again."
@@ -46,6 +51,7 @@ class WikisController < ApplicationController
 
   def destroy
     @wiki = Wiki.find(params[:id])
+    authorize @wiki
 
     if @wiki.destroy
       flash[:notice] = "\"#{@wiki.title}\" was deleted successfully."
@@ -58,10 +64,7 @@ class WikisController < ApplicationController
 
   private
 
-  def authorize_user
-    unless current_user.admin? || current_user.premium?
-      flash[:alert] = "You must be an admin to do that."
-      redirect_to wikis_path
-    end
+  def wiki_params
+    params.require(:wiki).permit(:title, :body, :private, :user_id)
   end
 end
