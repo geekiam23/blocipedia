@@ -3,29 +3,22 @@
     <li class="previous"><%= link_to "Back", :back %></li>
   </ul>
 </nav>
-
-
-<h2>Change My Password</h2>
-
 <div class="row">
 	<div class="col-md-7">
+    <h2>Change My Password</h2>
 		<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
 		  <%= devise_error_messages! %>
-
 			<div class="field form-group">
 		    <%= f.label :name %><br />
 		    <%= f.text_field :name, autofocus: true, class: "form-control", placeholder: "Enter new name" %>
 		  </div>
-
 		  <div class="field form-group">
 		    <%= f.label :email %><br />
 		    <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Enter new email address" %>
 		  </div>
-
 		  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
 		    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
 		  <% end %>
-
 		  <div class="field form-group">
 		    <b>New</b> <%= f.label :password %> -
 				<i>
@@ -52,40 +45,34 @@
 		  </div>
 		<% end %>
 		<br />
-    <nav aria-label="...">
-      <ul class="pager">
-        <li class="previous"><%= link_to "Back", :back %></li>
-      </ul>
-    </nav>
+  </div>
+  <div class="col-md-1">
 
-
-
-
-  	<div class="col-md-12 center">
-  		<div class="media">
-  			<div class="media-body">
-  				<h3 class="user-role-type media-heading text-center"><%= current_user.role.capitalize %> User</h3>
-  				<br />
-  			</div>
+  </div>
+	<div class="col-md-4 center pager">
+		<div class="media">
+			<div class="media-body text-center">
+				<h3 class="user-role-type media-heading "><%= current_user.role.capitalize %> User</h3>
+				<br />
   			<% if current_user.standard? %>
   				<p class="lead">You currenty have a <i><%= current_user.role.capitalize %></i> user profile. You can create public wikis. You can edit public wikis.</p>
   				<br />
-  				<div class="text-center"><%= link_to "Upgrade to Premium", new_charge_path, class: "btn btn-primary btn-lg" %></div>
+  				<div class="text-center">
+            <%= link_to "Upgrade to Premium", new_charge_path, class: "btn btn-primary btn-lg" %>
+          </div>
   			<% elsif current_user.premium? %>
   				<p class="lead">You currenty have a <i><%= current_user.role.capitalize %></i> user profile. You can create public and private wikis and you can edit wikis that other users create. Additionally, you can add other users as collaborators for your wikis!!</p>
   				<br />
-  				<div class="text-center"><%= link_to "Downgrade?", cancelling_charge_path, class: "btn btn-default btn-sm" %></div>
-  				<% elsif current_user.admin? %>
-  				<p class="lead">You're an <i>Admin</i> user. You can edit and delete any wikis. You can all wikis.</p>
+  				<div class="text-center">
+            <%= link_to "Downgrade?", cancelling_charge_path, class: "btn btn-default btn-sm" %>
+          </div>
+  			<% elsif current_user.admin? %>
+  				<p class="lead">You're an <i>Admin</i> user. You can edit and delete any wikis. You can view all wikis.</p>
   			<% end %>
-  		</div>
-  	</div>
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <br />
+        <hr>
+        <h3 class="user-role-type media-heading ">Want To Delete Your Account?</h3>
         <p>You can click the button below to permanently cancel and delete your account. <%= button_to "Delete My Account", registration_path(resource_name), class: "btn btn-danger", data: { confirm: "Are you sure you want to cancel and delete your account?" }, method: :delete %></p>
       </div>
-      <br />
     </div>
   </div>
-</div> <!-- row end -->
+</div>

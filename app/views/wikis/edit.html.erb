@@ -1,11 +1,36 @@
-<h1>Edit Wiki</h1>
+<h1 class="">Edit Post</h1>
 
 <div class="row">
   <div class="col-md-4">
+    <h5>Guidelines for posts:</h5>
+    <ul>
+      <li>Post on true and factual information.</li>
+      <li>Please source all information.</li>
+      <li>If you post false information, you will be removed from the site.</li>
+      <li>Feel free to use Markdown Syntax!</li>
+        <ul>
+          <li><a href="https://beegit.com/markdown-cheat-sheet" target="_blank">Click here for a refresher.</a></li>
+        </ul>
+    </ul>
+    <hr>
+		<h5>Wiki Collaborators:</h5>
+  	  <% if @wiki.collaborators.any? %>
+  		  <% @wiki.collaborators.each do |c| %>
+  			  <h6 class="text-muted">
+  				  <%= "#{c.user.name} - (#{c.user.email})" %>
+  			  </h6>
+        <% end %>
+  		<% end %>
+		<% if %>
+			<p class="">No one has collaborated on this wiki. Feel free to be the first!</p>
+		<% end %>
+    <% if @wiki.user == current_user || current_user.try(:admin?) %>
+      <%= link_to "Manage collaborators", wiki_collaborators_path(@wiki), class: "btn btn-info" %>
+		<% else current_user && current_user.standard? %>
+			<div class="text-center"><%= link_to "Upgrade to Premium", new_charge_path, class: "btn btn-primary btn-lg" %></div>
+		<% end %>
   </div>
   <div class="col-md-8">
-    <%= render partial: 'form', locals: { wiki: @wiki } %>
-       </div>
-     </div>
+    <%= render partial: 'form' %>
   </div>
 </div>

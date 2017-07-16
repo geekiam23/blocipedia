@@ -1,4 +1,5 @@
 class WikisController < ApplicationController
+  include ApplicationHelper
 
   def index
     @wikis = policy_scope(Wiki)
@@ -6,6 +7,7 @@ class WikisController < ApplicationController
 
   def show
     @wiki = Wiki.find(params[:id])
+    @users = Collaborator.all
   end
 
   def new
@@ -51,7 +53,7 @@ class WikisController < ApplicationController
 
   def destroy
     @wiki = Wiki.find(params[:id])
-    authorize @wiki
+
 
     if @wiki.destroy
       flash[:notice] = "\"#{@wiki.title}\" was deleted successfully."

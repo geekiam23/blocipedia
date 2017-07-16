@@ -1,4 +1,13 @@
-<h1 class="text-center">All Wikis</h1>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-4">
+			<h1>All Wikis</h1>
+		</div>
+		<div class="col-md-4 pull-right align-bottom new_wiki">
+			<%= link_to "New Wiki", new_wiki_path, class: "btn btn-primary btn-lg" %>
+		</div>
+	</div>
+</div>
 <br />
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
@@ -20,7 +29,7 @@
 									</h4>
 									<small>Created by <% wiki.user %></small>
 								</td>
-								<td width="3rem">
+								<td width="4rem">
 									<% if current_user %>
 										<%= link_to "Edit", edit_wiki_path(wiki), class: "btn btn-success" %>
 									<% end %>
@@ -32,9 +41,6 @@
 			</div>
 		</table>
 	</div>
-</div>
-<div class="text-center">
-	<%= link_to "New Wiki", new_wiki_path, class: "btn btn-primary btn-lg" %>
 </div>
 <br>
 <br>
