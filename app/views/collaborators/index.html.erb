@@ -6,16 +6,16 @@
   <hr>
     <div class="row">
       <div class="col-md-8">
-        <% @users.each do |user| %>
+        <% @wiki.collaborators.each do |user| %>
           <div class="row">
             <div class="col-md-4">
               <h4 class="media-heading">
-                <%= @wiki.user.name %>
+                <%= @wiki.collaborators.name %>
               </h4>
             </div>
             <div class="col-md-4">
               <% if @wiki.users.include?(user) %>
-                <% collaborator = @wiki.collaborator_for(user) %>
+                <% collaborator = @wiki.collaborators %>
                 <%= link_to "Remove as collaborator", [@wiki, @collaborator], method: :delete, class: "btn btn-sm btn-danger" %>
                 <br>
               <% else %>
