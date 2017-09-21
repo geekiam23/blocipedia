@@ -13,37 +13,37 @@
         </ul>
     </ul>
     <hr>
-    <h4 class="text-center">Wiki Collaborators:</h4>
-    <% if @wiki.collaborators.any? %>
-      <%= form_for [@wiki] do |f| %>
+    <% if current_user && @wiki.user == current_user || current_user.admin? %>
+      <h4 class="text-center">Wiki Collaborators:</h4>
+        <%= form_for [@wiki] do |f| %>
 
-        <% if @wiki.errors.any? %>
-           <div class="alert alert-danger">
-             <h4>There are <%= pluralize(@wiki.errors.count, "error") %>.</h4>
-             <ul>
-               <% @wiki.errors.full_messages.each do |msg| %>
-                 <li><%= msg %></li>
-               <% end %>
-             </ul>
-           </div>
-        <% end %>
+          <% if @wiki.errors.any? %>
+             <div class="alert alert-danger">
+               <h4>There are <%= pluralize(@wiki.errors.count, "error") %>.</h4>
+               <ul>
+                 <% @wiki.errors.full_messages.each do |msg| %>
+                   <li><%= msg %></li>
+                 <% end %>
+               </ul>
+             </div>
+          <% end %>
 
-        <%= collection_check_boxes(:wiki, :user_ids, User.all - [f.object.user], :id, :email) do |user| %>
-          <div class="checkbox">
-            <%= user.label do %>
-              <%= user.check_box %>
-              <%= user.object.name %>
-              <br>
-              <%= user.object.email %>
-              <hr class="low-margin">
-            <% end %>
+          <%= collection_check_boxes(:wiki, :user_ids, User.all - [f.object.user], :id, :email) do |user| %>
+            <div class="checkbox">
+              <%= user.label do %>
+                <%= user.check_box %>
+                <%= user.object.name %>
+                <br>
+                <%= user.object.email %>
+                <hr class="low-margin">
+              <% end %>
+            </div>
+          <% end %>
+
+          <div class="form-group text-center">
+             <%= f.submit "Save", class: 'btn btn-success' %>
           </div>
         <% end %>
-
-        <div class="form-group text-center">
-           <%= f.submit "Save", class: 'btn btn-success' %>
-        </div>
-      <% end %>
     <% end %>
     <% if current_user && current_user.standard? %>
       <p class="text-center">Want to add collaborators? Click to upgrade.</p>

@@ -1,12 +1,34 @@
 class WikiPolicy < ApplicationPolicy
 
+
   def index
-    true
+    false
   end
 
   def update?
+    user.admin? || record.user == user
+  end
+
+  def show?
+    scope.where(:id => record.id).exists?
+  end
+
+  def create?
     user.present?
   end
+
+  def new?
+    create?
+  end
+
+  def edit?
+    update?
+  end
+
+  def destroy?
+    user.admin? || record.user == user
+  end
+
 
   class Scope < Scope
     attr_reader :user, :scope
@@ -18,9 +40,9 @@ class WikiPolicy < ApplicationPolicy
 
      def resolve
        wikis = []
-       if user.role == 'admin'
+       if user && user.role == 'admin'
          wikis = scope.all # if the user is an admin, show them all the wikis
-       elsif user.role == 'premium'
+       elsif user && user.role == 'premium'
          all_wikis = scope.all
          all_wikis.each do |wiki|
            if wiki.private == false || wiki.user == user || wiki.collaborators.include?(user)

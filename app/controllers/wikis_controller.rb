@@ -1,5 +1,6 @@
 class WikisController < ApplicationController
   include ApplicationHelper
+  skip_before_action :authenticate_user!, only: [:index, :show]
 
   def index
     @wikis = policy_scope(Wiki)
@@ -12,6 +13,12 @@ class WikisController < ApplicationController
 
   def new
     @wiki = Wiki.new
+    authorize @wiki
+
+    if @wiki.private && @wiki.user.standard?
+			flash[:alert] = "You need a Premium account to make your Wiki private."
+			render :index
+		end
   end
 
   def create
@@ -34,6 +41,9 @@ class WikisController < ApplicationController
 
   def edit
     @wiki = Wiki.find(params[:id])
+    @users = User.all
+    @collaborator = Collaborator.new
+    authorize @wiki
   end
 
   def update
@@ -41,6 +51,7 @@ class WikisController < ApplicationController
     @wiki.title = params[:wiki][:title]
     @wiki.body = params[:wiki][:body]
     authorize @wiki
+
 
     if @wiki.update(wiki_params)
       flash[:notice] = "Wiki was updated."
@@ -64,7 +75,15 @@ class WikisController < ApplicationController
     end
   end
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   private
+
+  def user_not_authorized(exception)
+    policy_name = exception.policy.class.to_s.underscore
+    flash[:warning] = t "#{policy_name}.#{exception.query}", scope: "pundit", default: :default
+    redirect_to(request.referrer || root_path)
+  end
 
   def wiki_params
     params.require(:wiki).permit(:title, :body, :private, :user_id)
