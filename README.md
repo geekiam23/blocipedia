@@ -52,6 +52,6 @@ Users can create, edit and collaborate on markdown wikis.
 
 1. Clone the repository
 2. Run `bundle install`
-3. Create and migrate the database with `rake db:create` and `rake db:migrate`cd
+3. Create and migrate the database with `rake db:create` and `rake db:migrate`
 4. Start the server using `rails server`
 5. Run the app on `localhost:3000`
