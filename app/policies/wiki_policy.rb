@@ -1,32 +1,11 @@
 class WikiPolicy < ApplicationPolicy
 
+  def index?
 
-  def index
-    false
-  end
-
-  def update?
-    user.admin? || record.user == user
-  end
-
-  def show?
-    scope.where(:id => record.id).exists?
-  end
-
-  def create?
-    user.present?
-  end
-
-  def new?
-    create?
-  end
-
-  def edit?
-    update?
   end
 
   def destroy?
-    user.admin? || record.user == user
+    user.admin? || user.id == record.user_id
   end
 
 
@@ -45,7 +24,7 @@ class WikiPolicy < ApplicationPolicy
        elsif user && user.role == 'premium'
          all_wikis = scope.all
          all_wikis.each do |wiki|
-           if wiki.private == false || wiki.user == user || wiki.collaborators.include?(user)
+           if wiki.user == user || wiki.collaborators.pluck(:user_id).include?(user.id)
              wikis << wiki # if the user is premium, only show them public wikis, or that private wikis they created, or private wikis they are a collaborator on
            end
          end
@@ -53,7 +32,7 @@ class WikiPolicy < ApplicationPolicy
          all_wikis = scope.all
          wikis = []
          all_wikis.each do |wiki|
-           if wiki.private == false || wiki.collaborators.include?(user)
+           if wiki.collaborators.pluck(:user_id).include?(user.id)
              wikis << wiki # only show standard users public wikis and private wikis they are a collaborator on
            end
          end
